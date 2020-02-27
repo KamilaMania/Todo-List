@@ -1,5 +1,7 @@
 const addForm = document.querySelector(".add");
 const list = document.querySelector(".todos");
+const search = document.querySelector(".search input");
+const clock = document.querySelector(".clock");
 
 const generateTemplate = todo => {
   const html = `<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -24,3 +26,33 @@ list.addEventListener("click", e => {
     e.target.parentElement.remove();
   }
 });
+
+const filterTodos = term => {
+  Array.from(list.children)
+    .filter(todo => !todo.textContent.toLowerCase().includes(term))
+    .forEach(todo => todo.classList.add("filtered"));
+
+  Array.from(list.children)
+    .filter(todo => todo.textContent.includes(term))
+    .forEach(todo => todo.classList.remove("filtered"));
+};
+
+search.addEventListener("keyup", () => {
+  const term = search.value.trim().toLowerCase();
+  filterTodos(term);
+});
+
+const tick = () => {
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  const s = now.getSeconds();
+
+  const html = `
+    <span> ${h}</span>
+    <span> ${m}</span>`;
+
+  clock.innerHTML = html;
+};
+
+setInterval(tick, 1000);
